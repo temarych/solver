@@ -55,10 +55,19 @@ export function start() {
         };
     
         let payload = { code, date, requester };
+        let response;
     
-        let response = await execute(
-            axios.post(address, payload)
-        );
+        try {
+            response = await execute(
+                axios.post(address, payload)
+            );
+        } catch {
+            return bot.sendMessage(
+                message.from.id,
+                alert.error,
+                Format.configuration
+            );
+        }
     
         let { title, questions } = response.data;
         let header = { title, code };
@@ -104,17 +113,27 @@ export function start() {
         async function execute(executor) {
             let waitingMessage = await bot.sendMessage(
                 message.from.id, 
-                alert.pending
+                alert.pending,
+                Format.configuration
             );
-            
-            let result = await executor;
-        
-            await bot.deleteMessage(
-                waitingMessage.chat.id, 
-                waitingMessage.message_id
-            );
-    
-            return result;
+
+            try {
+
+                let result = await executor;
+                return result;
+
+            } catch (error) {
+
+                throw error;
+
+            } finally {
+
+                await bot.deleteMessage(
+                    waitingMessage.chat.id, 
+                    waitingMessage.message_id
+                );
+
+            }
         }
     });
 }
