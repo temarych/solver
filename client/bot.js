@@ -57,15 +57,24 @@ export function start() {
         let payload = { code, date, requester };
         let response;
     
+        let waitingMessage = await bot.sendMessage(
+            message.from.id, 
+            alert.pending,
+            Format.configuration
+        );
+
         try {
-            response = await execute(
-                axios.post(address, payload)
-            );
+            response = await axios.post(address, payload);
         } catch {
             return bot.sendMessage(
                 message.from.id,
                 alert.error,
                 Format.configuration
+            );
+        } finally {
+            await bot.deleteMessage(
+                waitingMessage.chat.id, 
+                waitingMessage.message_id
             );
         }
     
@@ -108,26 +117,6 @@ export function start() {
                 let buffer = await Format.formatHotspot(question.hotspot);
                 await bot.sendPhoto(message.from.id, buffer);
             }
-        }
-    
-        async function execute(executor) {
-            let waitingMessage = await bot.sendMessage(
-                message.from.id, 
-                alert.pending,
-                Format.configuration
-            );
-
-            try {
-                return await executor;
-            } catch (error) {
-                throw error;
-            } finally {
-                await bot.deleteMessage(
-                    waitingMessage.chat.id, 
-                    waitingMessage.message_id
-                );
-            }
-            
         }
     });
 }
