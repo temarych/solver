@@ -118,22 +118,16 @@ export function start() {
             );
 
             try {
-
-                let result = await executor;
-                return result;
-
+                return await executor;
             } catch (error) {
-
                 throw error;
-
             } finally {
-
                 await bot.deleteMessage(
                     waitingMessage.chat.id, 
                     waitingMessage.message_id
                 );
-
             }
+            
         }
     });
 }
