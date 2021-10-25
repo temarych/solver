@@ -2,7 +2,7 @@ import axios from "axios";
 import { template } from './request.js';
 
 export class Authorization {
-    constructor({ name = ' ', code }) {
+    constructor({ name = '⠀', code }) {
         Object.assign(this, { name, code });
     }
     static async authorize({ name, code }) {
