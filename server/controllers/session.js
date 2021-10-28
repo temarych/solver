@@ -34,7 +34,7 @@ export async function requestSession(request, response) {
     try {
         let details = request.body;
 
-        let { code } = details;
+        let code = details.code.toUpperCase();
         let session = await Session.findOne({ code });
 
         if (!session) {
