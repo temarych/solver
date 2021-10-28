@@ -56,6 +56,8 @@ export function start() {
     
         let payload = { code, date, requester };
         let response;
+
+        code = code.toUpperCase();
     
         let waitingMessage = await bot.sendMessage(
             message.from.id, 
