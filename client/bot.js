@@ -42,7 +42,8 @@ export function start() {
     });
     
     bot.onText(/\/solve (.+)/, async (message, match) => {
-        let code = match[1];
+        let rawCode = match[1];
+        let code = rawCode.toUpperCase();
     
         let root = 'session';
         let address = `${API}/${root}/`;
@@ -56,8 +57,6 @@ export function start() {
     
         let payload = { code, date, requester };
         let response;
-
-        code = code.toUpperCase();
     
         let waitingMessage = await bot.sendMessage(
             message.from.id, 
